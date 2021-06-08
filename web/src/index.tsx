@@ -1,6 +1,20 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
 import App from './App';
+import './index.css';
+import { createGlobalStyle } from 'styled-components';
+import { Theme } from './styles/style-constants';
 
-ReactDOM.render(<App />, document.getElementById('app'));
+const GlobalStyle = createGlobalStyle`
+  :root {
+    ${Theme.css.string}
+  }
+`;
+
+ReactDOM.render(
+  <>
+    <GlobalStyle />
+    <App />
+  </>,
+  document.getElementById('app')
+);
