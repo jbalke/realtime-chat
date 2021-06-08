@@ -30,25 +30,30 @@ module.exports = {
   },
 
   plugins: [
-    new ModuleFederationPlugin({
-      name: 'starter',
-      filename: 'remoteEntry.js',
-      remotes: {},
-      exposes: {},
-      shared: {
-        ...deps,
-        react: {
-          singleton: true,
-          eager: true,
-          requiredVersion: deps.react,
-        },
-        'react-dom': {
-          singleton: true,
-          eager: true,
-          requiredVersion: deps['react-dom'],
-        },
-      },
-    }),
+    // new ModuleFederationPlugin({
+    //   name: 'starter',
+    //   filename: 'remoteEntry.js',
+    //   remotes: {},
+    //   exposes: {},
+    //   shared: {
+    //     ...deps,
+    //     react: {
+    //       singleton: true,
+    //       eager: true,
+    //       requiredVersion: deps.react,
+    //     },
+    //     'react-dom': {
+    //       singleton: true,
+    //       eager: true,
+    //       requiredVersion: deps['react-dom'],
+    //     },
+    //     '@apollo/client': {
+    //       singleton: true,
+    //       eager: true,
+    //       requiredVersion: deps['@apollo/client'],
+    //     },
+    //   },
+    // }),
     new HtmlWebPackPlugin({
       template: './src/index.html',
     }),
