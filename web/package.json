@@ -9,7 +9,7 @@
     "start:live": "webpack serve --open --mode development --liveReload",
     "docker:build": "docker build . -t wp5-starter",
     "docker:run": "docker run -p 8080:8080 wp5-starter",
-    "gen": "apollo client:codegen --target typescript --addTypename --includes src/graphql/**/*.graphql --outputFlat src/generated"
+    "gen": "apollo client:codegen --target typescript --addTypename --includes src/graphql/**/*.ts --outputFlat src/generated"
   },
   "license": "MIT",
   "author": {
@@ -24,6 +24,7 @@
     "@babel/preset-typescript": "^7.13.0",
     "@types/react": "^17.0.9",
     "@types/react-dom": "^17.0.6",
+    "@types/styled-components": "^5.1.9",
     "@webpack-cli/serve": "^1.3.1",
     "babel-loader": "8.2.2",
     "babel-plugin-styled-components": "^1.12.0",
@@ -42,6 +43,7 @@
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "styled-components": "^5.3.0",
+    "theme-in-css": "^0.1.0",
     "ts-loader": "^9.2.3",
     "tslib": "^2.2.0",
     "typescript": "^4.3.2"
