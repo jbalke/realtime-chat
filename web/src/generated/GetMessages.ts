@@ -4,16 +4,16 @@
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL query operation: Messages
+// GraphQL query operation: GetMessages
 // ====================================================
 
-export interface Messages_messages {
+export interface GetMessages_messages {
   __typename: "Message";
   id: number;
   user: string;
   content: string;
 }
 
-export interface Messages {
-  messages: Messages_messages[];
+export interface GetMessages {
+  messages: GetMessages_messages[];
 }

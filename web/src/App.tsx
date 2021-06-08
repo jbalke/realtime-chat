@@ -1,7 +1,6 @@
 import React, { FunctionComponent } from 'react';
+import Chat from './Chat';
 
-const App: FunctionComponent = (props) => (
-  <div>Hi there, I'm React from Webpack 5.</div>
-);
+const App: FunctionComponent = (props) => <Chat />;
 
 export default App;

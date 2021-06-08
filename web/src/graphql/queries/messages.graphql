@@ -1,7 +1,0 @@
-query Messages {
-  messages {
-    id
-    user
-    content
-  }
-}
