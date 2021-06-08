@@ -15,6 +15,8 @@ module.exports = {
     port: 8080,
   },
 
+  devtool: 'eval-source-map',
+
   module: {
     rules: [
       {
