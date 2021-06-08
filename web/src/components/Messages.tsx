@@ -5,7 +5,9 @@ import { GET_MESSAGES } from '../graphql/queries/getMessages';
 import Message from './Message';
 
 const Messages: FunctionComponent<{ user: string }> = ({ user }) => {
-  const { loading, data, error } = useQuery<GetMessages>(GET_MESSAGES);
+  const { loading, data, error } = useQuery<GetMessages>(GET_MESSAGES, {
+    pollInterval: 500,
+  });
 
   if (loading) {
     return <p>Loading...</p>;
