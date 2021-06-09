@@ -29,7 +29,7 @@ const UserLabel = styled.div`
   border-radius: 50%;
   border: 2px solid ${Theme.color.remoteUser};
   line-height: 1;
-  pointer-events: none;
+  cursor: default;
 `;
 
 const Message: FunctionComponent<{

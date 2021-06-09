@@ -13,6 +13,7 @@ import { PostMessage, PostMessageVariables } from './generated/PostMessage';
 import { POST_MESSAGE } from './graphql/mutations/postMessage';
 import { split, HttpLink } from '@apollo/client';
 import { getMainDefinition } from '@apollo/client/utilities';
+import { useStickyState } from './hooks/stickyState';
 
 const httpLink = new HttpLink({
   uri: 'http://localhost:4001',
@@ -55,10 +56,8 @@ const client = new ApolloClient({
 });
 
 const Chat: FunctionComponent = (props) => {
-  const [state, setstate] = useState({
-    user: 'John',
-    content: '',
-  });
+  const [message, setMessage] = useState('');
+  const [name, setName] = useStickyState('John', 'chatName');
 
   const [postMessage, { data, loading, error }] =
     useMutation<PostMessage, PostMessageVariables>(POST_MESSAGE);
@@ -66,24 +65,24 @@ const Chat: FunctionComponent = (props) => {
   const handleSubmit = (evt: SyntheticEvent) => {
     evt.preventDefault();
 
-    if (state.content.length > 0) {
-      postMessage({ variables: state });
-      setstate(old => ({...old, content:""}))
+    if (message.length > 0) {
+      postMessage({ variables: { content: message, user: name } });
+      setMessage('');
     }
   };
 
   return (
     <Container>
-      <Messages user={state.user} />
+      <Messages user={name} />
       <MessageEntry
         handleSubmit={handleSubmit}
         setName={(evt) => {
-          setstate((old) => ({ ...old, user: evt.target.value }));
+          setName(evt.target.value);
         }}
         setContent={(evt) => {
-          setstate((old) => ({ ...old, content: evt.target.value }));
+          setMessage(evt.target.value);
         }}
-        formValues={state}
+        formValues={{  user: name, content: message  }}
       />
     </Container>
   );
