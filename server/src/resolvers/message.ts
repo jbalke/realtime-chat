@@ -20,16 +20,9 @@ class PostMessageInput implements Partial<Message> {
   content: string;
 }
 
-type FN = () => void;
-
 @Resolver()
 export class MessageResolver {
   private messageStore: Message[] = [];
-  private subscribers: FN[] = [];
-
-  private onMessagesUpdates(fn: FN) {
-    this.subscribers.push(fn);
-  }
 
   @Mutation((returns) => Int)
   async postMessage(
@@ -49,9 +42,7 @@ export class MessageResolver {
   }
 
   @Subscription({ topics: channel })
-  messageSent(@Root() { id, user, content }: Message): Message {
-    return {id, user, content}
-
+  messageSent(@Root() messageSentPayload: Message): Message {
+    return messageSentPayload;
   }
-  
 }
