@@ -1,29 +1,57 @@
-import { Arg, Field, ID, InputType, Int, Mutation, Query, Resolver } from "type-graphql";
-import { Message } from "../entities/Message";
+import {
+  Arg,
+  Field,
+  InputType,
+  Int,
+  Mutation,
+  Query,
+  Resolver,
+  Subscription, PubSub, Root, PubSubEngine
+} from 'type-graphql';
+import { Message } from '../entities/Message';
 
-@InputType({description: 'New message data'})
+const channel = 'CHAT_CHANNEL';
+
+@InputType({ description: 'New message data' })
 class PostMessageInput implements Partial<Message> {
   @Field()
   user: string;
   @Field()
   content: string;
 }
-  
+
+type FN = () => void;
+
 @Resolver()
 export class MessageResolver {
   private messageStore: Message[] = [];
+  private subscribers: FN[] = [];
 
-  @Mutation(returns => Int)
-  async postMessage(@Arg("data") {user, content}: PostMessageInput): Promise<number> {
+  private onMessagesUpdates(fn: FN) {
+    this.subscribers.push(fn);
+  }
+
+  @Mutation((returns) => Int)
+  async postMessage(
+    @PubSub() pubSub: PubSubEngine,
+    @Arg('data') { user, content }: PostMessageInput
+  ): Promise<number> {
     const id = this.messageStore.length;
-    this.messageStore.push({ id, user, content });
+    const message = { id, user, content };
+    this.messageStore.push(message);
+    await pubSub.publish(channel, message);
     return id;
   }
-  
-  @Query(returns => [Message])
+
+  @Query((returns) => [Message])
   async messages() {
     return await this.messageStore;
   }
 
+  @Subscription({ topics: channel })
+  messageSent(@Root() { id, user, content }: Message): Message {
+    return {id, user, content}
+
+  }
   
 }
