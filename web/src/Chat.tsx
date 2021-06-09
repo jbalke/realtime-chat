@@ -56,33 +56,16 @@ const client = new ApolloClient({
 });
 
 const Chat: FunctionComponent = (props) => {
-  const [message, setMessage] = useState('');
   const [name, setName] = useStickyState('John', 'chatName');
-
-  const [postMessage, { data, loading, error }] =
-    useMutation<PostMessage, PostMessageVariables>(POST_MESSAGE);
-
-  const handleSubmit = (evt: SyntheticEvent) => {
-    evt.preventDefault();
-
-    if (message.length > 0) {
-      postMessage({ variables: { content: message, user: name } });
-      setMessage('');
-    }
-  };
-
+  
   return (
     <Container>
       <Messages user={name} />
       <MessageEntry
-        handleSubmit={handleSubmit}
         setName={(evt) => {
           setName(evt.target.value);
         }}
-        setContent={(evt) => {
-          setMessage(evt.target.value);
-        }}
-        formValues={{  user: name, content: message  }}
+        formValues={{  user: name }}
       />
     </Container>
   );

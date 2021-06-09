@@ -1,6 +1,9 @@
-import React, { ChangeEvent, FormEvent, SyntheticEvent } from 'react';
+import { useMutation } from '@apollo/client';
+import React, { ChangeEvent, FormEvent, SyntheticEvent, useState } from 'react';
 import { FunctionComponent } from 'react';
 import styled from 'styled-components';
+import { PostMessage, PostMessageVariables } from '../generated/PostMessage';
+import { POST_MESSAGE } from '../graphql/mutations/postMessage';
 import { Theme } from '../styles/style-constants';
 
 const StyledForm = styled.form`
@@ -34,24 +37,36 @@ const StyledForm = styled.form`
 `;
 
 const MessageEntry: FunctionComponent<{
-  handleSubmit: (evt: SyntheticEvent) => void;
   setName: (evt: ChangeEvent<HTMLInputElement>) => void;
-  setContent: (evt: ChangeEvent<HTMLInputElement>) => void;
-  formValues: { user: string; content: string };
-}> = ({ handleSubmit, setName, setContent, formValues }) => {
+  formValues: { user: string   };
+}> = ({ setName, formValues:   {   user   } }) => {
+  const [message, setMessage] = useState('');
+
+  const [postMessage, { data, loading, error }] =
+    useMutation<PostMessage, PostMessageVariables>(POST_MESSAGE);
+
+  const handleSubmit = (evt: SyntheticEvent) => {
+    evt.preventDefault();
+
+    if (message.length > 0) {
+      postMessage({ variables: { content: message, user } });
+      setMessage('');
+    }
+  };
+
   return (
     <StyledForm onSubmit={handleSubmit}>
       <input
         type='text'
         onChange={setName}
-        value={formValues.user}
+        value={user}
         placeholder='Name'
         required
       />
       <input
         type='text'
-        onChange={setContent}
-        value={formValues.content}
+        onChange={(evt) => setMessage(evt.target.value)}
+        value={message}
         placeholder='Message'
         required
       />
