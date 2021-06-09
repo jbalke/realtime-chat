@@ -45,13 +45,15 @@ const MessageEntry: FunctionComponent<{
         type='text'
         onChange={setName}
         value={formValues.user}
-        placeholder='Your name'
+        placeholder='Name'
+        required
       />
       <input
         type='text'
         onChange={setContent}
         value={formValues.content}
         placeholder='Message'
+        required
       />
       <input type='submit' value='Submit' />
     </StyledForm>
