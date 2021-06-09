@@ -2,7 +2,7 @@ import {
   ApolloClient,
   ApolloProvider,
   InMemoryCache,
-  useMutation,,
+  useMutation,
 } from '@apollo/client';
 import { WebSocketLink } from '@apollo/client/link/ws';
 import React, { FunctionComponent, SyntheticEvent, useState } from 'react';

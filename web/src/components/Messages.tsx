@@ -1,25 +1,40 @@
 import { useQuery } from '@apollo/client';
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, useEffect } from 'react';
 import { GetMessages } from '../generated/GetMessages';
+import { OnNewMessage } from '../generated/OnNewMessage';
 import { GET_MESSAGES } from '../graphql/queries/getMessages';
+import { MESSAGE_SUBSCRIPTION } from '../graphql/subscriptions/onNewMessage';
 import Message from './Message';
 
 const Messages: FunctionComponent<{ user: string }> = ({ user }) => {
-  const { loading, data, error } = useQuery<GetMessages>(GET_MESSAGES, {
-    pollInterval: 500,
-  });
+  const { loading, data, error, subscribeToMore } =
+    useQuery<GetMessages>(GET_MESSAGES);
 
-  if (loading) {
-    return <p>Loading...</p>;
-  }
+  useEffect(() => {
+    subscribeToMore<OnNewMessage>({
+      document: MESSAGE_SUBSCRIPTION,
+      updateQuery: (prev, { subscriptionData }) => {
+        if (!subscriptionData) return prev;
 
-  if (!data) {
-    return null;
-  }
+        const newMessage = subscriptionData.data.messageSent;
+
+        return {
+          messages: [...prev.messages, newMessage],
+        };
+      },
+    });
+  }, []);
+
+    if (loading) {
+      return <p>Loading...</p>;
+    }
+    if (error) {
+      return <p>`Error: ${error.message}`</p>;
+    }
 
   return (
     <>
-      {data.messages.map(({ id, user: messageUser, content }) => (
+      {data?.messages.map(({ id, user: messageUser, content }) => (
         <Message
           key={id}
           id={id}
@@ -27,7 +42,7 @@ const Messages: FunctionComponent<{ user: string }> = ({ user }) => {
           content={content}
           localUser={messageUser === user}
         />
-      ))}{' '}
+      ))}
     </>
   );
 };
