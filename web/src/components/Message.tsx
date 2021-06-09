@@ -16,6 +16,7 @@ const MessageBody = styled.div<{ localUser: boolean }>`
   padding: 1em;
   border-radius: 1em;
   max-width: 60%;
+  pointer-events: none;
 `;
 
 const UserLabel = styled.div`
@@ -28,6 +29,7 @@ const UserLabel = styled.div`
   border-radius: 50%;
   border: 2px solid ${Theme.color.remoteUser};
   line-height: 1;
+  pointer-events: none;
 `;
 
 const Message: FunctionComponent<{
@@ -38,7 +40,9 @@ const Message: FunctionComponent<{
 }> = ({ id, name, content, localUser }) => {
   return (
     <StyledMessage localUser={localUser}>
-      {!localUser && <UserLabel>{name.slice(0, 2).toUpperCase()}</UserLabel>}
+      {!localUser && (
+        <UserLabel title={name}>{name.slice(0, 2).toUpperCase()}</UserLabel>
+      )}
       <MessageBody localUser={localUser}>{content}</MessageBody>
     </StyledMessage>
   );
